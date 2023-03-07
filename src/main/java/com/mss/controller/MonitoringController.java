@@ -1,4 +1,4 @@
-package com.mss;
+package com.mss.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/monitoring")
 public class MonitoringController {
 
+    /* 화면 초기화 */
     @RequestMapping(method = RequestMethod.GET)
-    public String testController(final Model model) throws Exception {
+    public String init(final Model model) throws Exception {
 
-        model.addAttribute("title", "테스트 화면");
+        // TODO: 현재시각 설정
+        model.addAttribute("nowTime", "2023-03-07 13:00:00");
 
         return "Monitoring";
     }

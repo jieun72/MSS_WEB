@@ -10,12 +10,25 @@
 <body>
 
 <div id="content" layout:fragment="content" class="container-fluid">
-    <h3 id="title" th:text="${title}">테스트</h3>
-    <div id="resultArea" class="resultArea">
-        <div id="mapArea" class="mapArea"></div>
-        <div id="infoArea" class="infoArea"></div>
-    </div>
-    <div id="loading" class="loading-bar"></div>
+    <form>
+        <div class="naviArea">
+            <div class="timeArea">
+                <div class="nowTime">
+                    <h4 th:text="${nowTime}"></h4>
+                </div>
+                <div class="nowTimeBtn">
+                    <input type="button" class="btn btn-secondary btn-sm" id="searchButton" value="현재시간" />
+                </div>
+            </div>
+
+        </div>
+
+        <div id="resultArea" class="resultArea">
+            <div id="mapArea" class="mapArea"></div>
+            <div id="infoArea" class="infoArea"></div>
+        </div>
+        <div id="loading" class="loading-bar"></div>
+    </form>
 </div>
 
 </body>
