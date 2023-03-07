@@ -5,17 +5,17 @@
 <head>
     <meta charset="UTF-8">
     <script type="text/javascript" th:src="@{/js/Monitoring.js}"></script>
-    <title>모니터링 화면</title>
+    <title>강수량 모니터링</title>
 </head>
 <body>
 
-<div id="content" layout:fragment="content" class="container">
+<div id="content" layout:fragment="content" class="container-fluid">
     <h3 id="title" th:text="${title}">테스트</h3>
-    <div id="resultArea">
-        <div style="width: 950px;" id="mychart" class="chartArea"></div>
-        <div style="width: 950px; height: 200px;" id="histogram" class="chartArea"></div>
+    <div id="resultArea" class="resultArea">
+        <div id="mapArea" class="mapArea"></div>
+        <div id="infoArea" class="infoArea"></div>
     </div>
-    <div class="loading-bar" id="loading"></div>
+    <div id="loading" class="loading-bar"></div>
 </div>
 
 </body>
