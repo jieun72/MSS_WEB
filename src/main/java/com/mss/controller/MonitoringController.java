@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/monitoring")
 public class MonitoringController {
 
-    @Value("${kakao.apikey}")
-    private String apiKey;
-
     /* 화면 초기화 */
     @RequestMapping(method = RequestMethod.GET)
     public String init(final Model model) throws Exception {
