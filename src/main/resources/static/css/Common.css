@@ -89,21 +89,21 @@
 /* 지도 */
 .mapArea {
     width: 70%;
-    height: 500px;
+    height: 700px;
     background-color: #c69500;
     float: left;
 }
 
 .mapAreaMobile {
     width: 100%;
-    height: 500px;
+    height: 700px;
     background-color: #c69500;
 }
 
 /* 차트 */
 .infoArea {
     width: 30%;
-    height: 500px;
+    height: 700px;
     padding: 20px;
     background-color: #5a6268;
     display: inline-block;
@@ -111,7 +111,7 @@
 
 .infoAreaMobile {
     width: 100%;
-    height: 500px;
+    height: 700px;
     padding: 20px;
     background-color: #5a6268;
 }
