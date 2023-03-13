@@ -34,7 +34,7 @@
 /* footer */
 .footer {
     margin-bottom: 10px;
-    background-color: #0c5460;
+    background-color: #666666;
     width: 100%;
     height: 100%;
 }
@@ -46,6 +46,10 @@
 .container {
     min-height: 600px;
     height: 100%;
+}
+
+.resultArea {
+    margin-bottom: 10px;
 }
 
 /* 현재시각 */
@@ -92,12 +96,16 @@
     z-index: 10000;
 }
 
+.resultArea {
+    height: 100%;
+}
+
 /* 지도 */
 .mapArea {
-    width: 70%;
+    width: 100%;
     height: 700px;
     background-color: #c69500;
-    float: left;
+    /*float: left;*/
 }
 
 .mapAreaMobile {
@@ -110,8 +118,8 @@
 .infoArea {
     width: 30%;
     height: 700px;
-    padding: 20px;
-    background-color: #5a6268;
+    padding-left: 20px;
+    background-color: #ffffff;
     display: inline-block;
 }
 
@@ -119,14 +127,20 @@
     width: 100%;
     height: 700px;
     padding: 20px;
-    background-color: #5a6268;
+    background-color: #ffffff;
 }
 
-/* 검색조건 파트 */
-.search-title {
-    padding-right: 10px;
-    padding-top: 3px;
-    font-size: large;
-    font-weight: bold;
+.chartArea {
+    width: 100%;
+    height: 300px;
+    margin-bottom: 10px;
 }
+
+.tableArea {
+    width: 100%;
+    height: 300px;
+    background-color: #fff3cd;
+    margin-bottom: 10px;
+}
+
 /* -----------메인콘텐츠------------ */

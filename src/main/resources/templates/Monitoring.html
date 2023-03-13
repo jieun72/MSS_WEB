@@ -10,20 +10,24 @@
 <body>
 
 <div id="content" layout:fragment="content" class="container-fluid">
-    <form>
+    <form role="form" id="searchForm" th:object="${monitoringForm}">
         <div class="naviArea">
             <div class="timeArea">
                 <div class="nowTime">
-                    <span th:text="${nowTime}"></span>
+                    <span id="nowTime"></span>
+                    <input type="hidden" id="timeVal" th:field="*{searchDate}" />
                     <input type="button" class="btn btn-secondary btn-sm" id="searchButton" value="현재시간" />
                 </div>
             </div>
-
         </div>
 
         <div id="resultArea" class="resultArea">
             <div id="mapArea" class="mapArea"></div>
-            <div id="infoArea" class="infoArea"></div>
+            <!--<div id="infoArea" class="infoArea">
+                <span class="stnInfo">선택 지점 정보</span>
+                <div id="chartArea" class="chartArea"></div>
+                <div id="tableArea" class="tableArea"></div>
+            </div>-->
         </div>
         <div id="loading" class="loading-bar"></div>
     </form>
