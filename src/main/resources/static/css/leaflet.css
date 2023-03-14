@@ -457,11 +457,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .leaflet-touch .leaflet-control-attribution,
 .leaflet-touch .leaflet-control-layers,
 .leaflet-touch .leaflet-bar {
-	box-shadow: none;
+	box-shadow: 2px 4px 8px rgb(0 0 0 / 10%);
 	}
 .leaflet-touch .leaflet-control-layers,
 .leaflet-touch .leaflet-bar {
-	border: 2px solid rgba(0,0,0,0.2);
+	border: 1.3px solid rgba(0,0,0,0.2);
 	background-clip: padding-box;
 	}
 

@@ -18,8 +18,12 @@ public class MonitoringController {
     public String init(final MonitoringForm searchForm, Model model) throws Exception {
 
         Date now = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:00.000Z");
         String nowTime = sdf.format(now);
+
+        StringBuilder sb = new StringBuilder(nowTime);
+        sb.setCharAt(15, '0');
+        nowTime = sb.toString();
 
         searchForm.setSearchDate(nowTime);
 

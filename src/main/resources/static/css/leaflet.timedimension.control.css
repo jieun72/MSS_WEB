@@ -14,7 +14,7 @@
     float: left;
     height: 26px;
     line-height: 26px;
-    border: solid #a5a5a5;
+    /*border: solid #a5a5a5;*/
     background-color: #fff;
     border-width: 0 1px 0 0;
 }
@@ -36,7 +36,7 @@
 .leaflet-bar-timecontrol a.timecontrol-date,
 .leaflet-bar-timecontrol a.timecontrol-date:hover {
     position: relative;
-    min-width: 150px;
+    min-width: 200px;
     width: auto;
     padding: 0 10px 0 20px;
     white-space: nowrap;
@@ -50,7 +50,7 @@
     background-color: #ffefa4;
 }
 .leaflet-bar-timecontrol .timecontrol-dateslider .slider {
-    width: 200px;
+    width: 380px;
 }
 .leaflet-bar-timecontrol .timecontrol-speed {
     white-space: nowrap;
@@ -83,7 +83,7 @@
 
 .timecontrol-slider .slider {
     position: relative;
-    height: 12px;
+    height: 30px;
     margin: 6px;
     border: 1px solid #a5a5a5;
     cursor: pointer;
@@ -101,14 +101,14 @@
 }
 .timecontrol-slider .knob {
     position: absolute;
-    width: 8px;
-    height: 22px;
+    width: 12px;
+    height: 32px;
     background-color: #ddd;
     border-radius: 2px;
     border: 1px solid #a5a5a5;
     /*use margins because on ie,leaflet will use top/left for positionning*/
-    margin-top: -6px;
-    margin-left: -4px;
+    margin-top: -2px;
+    margin-left: -7px;
     cursor: ew-resize;
     cursor: -webkit-grab;
     cursor: -moz-grab;
@@ -277,8 +277,8 @@ a.timecontrol-play.loading:before {
     }
 }
 .leaflet-touch .leaflet-bar-timecontrol .leaflet-control-timecontrol{
-     height: 30px;
-    line-height: 30px;
+     height: 50px;
+    line-height: 50px;
 }
 .leaflet-touch .timecontrol-slider .slider{
     margin-top: 10px;

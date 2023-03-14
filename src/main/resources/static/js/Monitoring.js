@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
     var isTouchDevice = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|playbook|silk|BlackBerry|BB10|Windows Phone|Tizen|Bada|webOS|IEMobile|Opera Mini)/);
+    var datetime = $("#timeVal").val();
 
     // 웹-모바일 화면구성
     if(!isTouchDevice) {
@@ -17,48 +18,44 @@ $(document).ready(function(){
         $("#infoArea").addClass("infoAreaMobile");
     }
 
+    var currentTime = new Date(datetime);
+    var endDate = new Date(currentTime.getTime());
+    L.TimeDimension.Util.addTimeDuration(endDate, "PT3H", true);
+
     // leaflet을 이용한 지도 생성
     var map = L.map('mapArea', {
         zoom: 12,
         center: [37.56, 127],
         timeDimension: true,
         timeDimensionControl: true,
+        timeDimensionOptions: {
+            timeInterval: currentTime.toISOString() +"/" + endDate.toISOString(),
+            period: "PT10M",
+            currentTime: currentTime.getTime()
+        },
         timeDimensionControlOptions: {
             playerOptions: {
-                transitionTime: 1000, startOver: true
+                transitionTime: 1000,
+                startOver: true
             },
+            loopButton: false,
+            autoPlay: false,
+            timeZones: ["Local", "UTC"]
         }
     });
+
     L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attributionControl: false,
         maxZoom: 15,
         minZoom: 7
     }).addTo(map);
 
-    // 테스트마커+테스트팝업
-/*    L.marker([37.56, 127]).addTo(map)
-        .bindPopup('테스트 팝업')
-        .openPopup();*/
-
     // 현재시각 표시
-    var datetime = $("#timeVal").val();
     $("#nowTime").text(datetime.substr(0,4)+"년"+datetime.substr(5,2)+"월"+datetime
         .substr(8,2)+"일 "+datetime.substr(11,2)+"시"+datetime.substr(14,2)+"분");
-    searchMakers(datetime);
 
-    // TODO:지도 마커 검색
-
-
-    // 차트 초기화
-/*    let dataArr = [
-        ['2023-03-10 13:40:00', 13],
-        ['2023-03-10 13:50:00', 6],
-        ['2023-03-10 14:00:00', 27]]
-
-    setChart('강수 예측', dataArr);*/
-
-
-    // TODO: 검색 로직2-선택 지점
+    // TODO:시간으로 지도 검색
+    searchMap(datetime);
 
     // 현재시간 클릭 시 화면 초기화
     $(document).on('click', '#searchButton', function(){
@@ -70,11 +67,10 @@ $(document).ready(function(){
 
         // TODO: (모바일전용) 실시간 알림 제공
     }
-
 });
 
-/* 지도마커 검색 */
-function searchMakers(datetime) {
+/* 시간으로 지도 검색 */
+function searchMap(datetime) {
     console.log(datetime);
     // TODO:지도마커 검색+지도에 표시
 }
@@ -85,7 +81,6 @@ function refresh() {
 }
 
 /* 차트 작성 */
-
 function setChart(title, dataArr) {
 
     var theme = {
