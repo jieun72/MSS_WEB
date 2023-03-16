@@ -26,6 +26,7 @@ $(document).ready(function(){
     var map = L.map('mapArea', {
         zoom: 12,
         center: [37.56, 127],
+        crs: L.CRS.EPSG3857,
         timeDimension: true,
         timeDimensionControl: true,
         timeDimensionOptions: {
@@ -40,7 +41,7 @@ $(document).ready(function(){
             },
             loopButton: false,
             autoPlay: false,
-            timeZones: ["Local", "UTC"]
+            timeZones: ["Local"]
         }
     });
 
@@ -56,6 +57,66 @@ $(document).ready(function(){
 
     // TODO:시간으로 지도 검색
     searchMap(datetime);
+
+/*
+    // Add image layer
+    var imageUrl = 'https://www.socib.es/users/mobims/imageArchive/clm/sirena/clm/c04/2014/01/11/clm_s_04_2014-01-01-12-00.png';
+    var imageBounds = [[38.69, 1.1675], [38.71, 1.1325]];
+
+    var imageLayer = L.imageOverlay(imageUrl, imageBounds, {
+        opacity: 0.5
+    });
+
+    var getSirenaImageUrl = function(baseUrl, time) {
+        var beginUrl = baseUrl.substring(0, baseUrl.lastIndexOf("/") - 10);
+        beginUrl = beginUrl + new Date(time).format('yyyy/mm/dd');
+        var strTime = new Date(time).format('yyyy-mm-dd-HH-MM');
+        var initFileUrl = baseUrl.substring(baseUrl.lastIndexOf("/"), baseUrl.length - 20);
+        url = beginUrl + initFileUrl + strTime + '.png';
+        return url;
+    };
+
+    var testImageTimeLayer = L.timeDimension.layer.imageOverlay(imageLayer, {
+        getUrlFunction: getSirenaImageUrl
+    });
+    testImageTimeLayer.addTo(map);*/
+
+    var mapData = [
+        {'lat':37.565717, 'lng':126.976971, 'val':13},
+        {'lat':37.548316, 'lng':127.06037, 'val':6},
+        {'lat':37.59384, 'lng':127.075298, 'val':33},
+        {'lat':37.656185, 'lng':127.039009, 'val':22},
+        {'lat':37.609491, 'lng':126.930682, 'val':17},
+        {'lat':37.569195, 'lng':126.915256, 'val':42},
+        {'lat':37.555278, 'lng':126.93805, 'val':2},
+        {'lat':37.522056, 'lng':126.890612, 'val':3},
+        {'lat':37.483125, 'lng':126.901416, 'val':49.9},
+        {'lat':37.505908, 'lng':127.003438, 'val':0.2},
+        {'lat':37.516365, 'lng':127.020339, 'val':6},
+        {'lat':37.516614, 'lng':127.131325, 'val':13},
+        {'lat':37.67790008, 'lng':127.00328, 'val':21}
+    ];
+
+    var testData = {
+        max: 50,
+        data: mapData
+    };
+
+    var cfg = {
+        //"radius": 2,
+        "radius": 50,
+        "maxOpacity": .5,
+        //"scaleRadius": true,
+        "scaleRadius": false,
+        "useLocalExtrema": true,
+        latField: 'lat',
+        lngField: 'lng',
+        valueField: 'val'
+    };
+
+    var heatmapLayer = new HeatmapOverlay(cfg).addTo(map);
+
+    heatmapLayer.setData(testData);
 
     // 현재시간 클릭 시 화면 초기화
     $(document).on('click', '#searchButton', function(){
