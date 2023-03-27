@@ -4,6 +4,8 @@ import com.mss.form.MonitoringForm;
 import com.mss.service.MonitoringService;
 import com.mss.vo.ResponseRainVO;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,11 +64,63 @@ public class MonitoringController {
 
         // 강수량 검색
         String searchDate = searchForm.getSearchDate();
+
+        // TODO:테스트용 데이터(추후삭제)
         searchDate = "2022-12-01 03:10:00";
+
         List<ResponseRainVO> rainResult = this.monitoringService.searchRainResult(searchDate);
         searchForm.setRainResultList(rainResult);
-        model.addAttribute(searchForm);
 
+        String jsonArray = this.makeJson(rainResult);
+        searchForm.setJsonResult(jsonArray);
+
+        model.addAttribute(searchForm);
         return searchForm;
+    }
+
+    /*
+    * JSON 형식 변환
+    * @param List<ResponseRainVO> listData
+    * @return String returnJson
+    * */
+    private String makeJson(List<ResponseRainVO> listData) {
+        String returnJson = "";
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("type", "FeatureCollection");
+
+        JSONArray featureArray = new JSONArray();
+
+        for(int i=0; i<listData.size(); i++) {
+
+            JSONObject feautres = new JSONObject();
+            JSONObject properties = new JSONObject();
+            JSONObject geometry = new JSONObject();
+            JSONArray coordiArray = new JSONArray();
+
+            coordiArray.add(listData.get(i).getLon());
+            coordiArray.add(listData.get(i).getLat());
+
+            properties.put("stnId", listData.get(i).getStnId());
+            properties.put("time", listData.get(i).getFcstTime());
+            properties.put("rainresult", listData.get(i).getRainResult());
+            properties.put("radius", listData.get(i).getExpandArea());
+
+            geometry.put("type", "Point");
+            geometry.put("coordinates", coordiArray);
+
+            feautres.put("type", "Feature");
+            feautres.put("id", i+1);
+            feautres.put("properties", properties);
+            feautres.put("geometry", geometry);
+            featureArray.add(feautres);
+
+            jsonObject.put("features", featureArray);
+
+        }
+
+        returnJson = jsonObject.toString();
+
+        return returnJson;
     }
 }

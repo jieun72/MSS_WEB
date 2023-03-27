@@ -18,4 +18,7 @@ public class MonitoringForm {
     /* 검색결과-강수결과 */
     private List<ResponseRainVO> rainResultList;
 
+    /* 검색결과-JSON */
+    private String jsonResult;
+
 }

@@ -1,6 +1,5 @@
 $(document).ready(function(){
-
-    var rainResultList = "";
+    
     var isTouchDevice = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|playbook|silk|BlackBerry|BB10|Windows Phone|Tizen|Bada|webOS|IEMobile|Opera Mini)/);
     var datetime = $("#timeVal").val();
 
@@ -23,6 +22,7 @@ $(document).ready(function(){
     var endDate = new Date(currentTime.getTime());
     L.TimeDimension.Util.addTimeDuration(endDate, "PT3H", true);
 
+    // TODO:테스트용 데이터(추후삭제)
     // leaflet을 이용한 지도 생성
     var map = L.map('mapArea', {
         zoom: 12,
@@ -31,9 +31,11 @@ $(document).ready(function(){
         timeDimension: true,
         timeDimensionControl: true,
         timeDimensionOptions: {
-            timeInterval: currentTime.toISOString() +"/" + endDate.toISOString(),
+            timeInterval: "2022-12-01 03:10:00 / 2022-12-01 06:10:00",
+            // timeInterval: currentTime.toISOString() +"/" + endDate.toISOString(),
             period: "PT10M",
-            currentTime: currentTime.getTime()
+            currentTime: "2022-12-01 03:10:00"
+            // currentTime: currentTime.getTime()
         },
         timeDimensionControlOptions: {
             playerOptions: {
@@ -57,46 +59,78 @@ $(document).ready(function(){
         .substr(8,2)+"일 "+datetime.substr(11,2)+"시"+datetime.substr(14,2)+"분");
 
     // 현재시간으로 강수량 검색
-    searchMap(datetime);
+    datetime = datetime.substr(0,19);
 
-    console.log(rainResultList);
+    $("#timeVal").val(datetime);
 
-    var mapData = [
-        {'lat':37.565717, 'lng':126.976971, 'val':13, 'radius':10},
-        {'lat':37.548316, 'lng':127.06037, 'val':6, 'radius':10},
-        {'lat':37.59384, 'lng':127.075298, 'val':33, 'radius':10},
-        {'lat':37.656185, 'lng':127.039009, 'val':22, 'radius':10},
-        {'lat':37.609491, 'lng':126.930682, 'val':17, 'radius':10},
-        {'lat':37.569195, 'lng':126.915256, 'val':42, 'radius':30},
-        {'lat':37.555278, 'lng':126.93805, 'val':2, 'radius':10},
-        {'lat':37.522056, 'lng':126.890612, 'val':3, 'radius':10},
-        {'lat':37.483125, 'lng':126.901416, 'val':49.9, 'radius':10},
-        {'lat':37.505908, 'lng':127.003438, 'val':0.2, 'radius':20},
-        {'lat':37.516365, 'lng':127.020339, 'val':6, 'radius':10},
-        {'lat':37.516614, 'lng':127.131325, 'val':13, 'radius':10},
-        {'lat':37.67790008, 'lng':127.00328, 'val':21, 'radius':20}
-    ];
+    $.ajax({
+        url: "/monitoring/findRainResultList",
+        type: "GET",
+        data: $("#searchForm").serialize()
+    }).done(function (data, textStatus, jqXHR) {
 
-    var testData = {
-        max: 50,
-        data: mapData
-    };
+        var timeSeriesGeoJSON = data.jsonResult;
 
-    var cfg = {
-        "radius": 'radius',
-        "maxOpacity": .5,
-        "scaleRadius": true,
-        "scaleRadius": false,
-        "useLocalExtrema": true,
-        latField: 'lat',
-        lngField: 'lng',
-        valueField: 'val'
-    };
+        function style(feature) {
+            return {
+                opacity: 1,
+                radius: feature.properties.radius,
+                color: 'black',
+                border: 1,
+                fillOpacity: 1,
+                fillColor: getColor(feature.properties.rainresult)
+            };
+        }
 
-    var heatmapLayer = new HeatmapOverlay(cfg).addTo(map);
+        var timeSeriesLayer = L.geoJSON(JSON.parse(timeSeriesGeoJSON), {pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, style(feature));
+            }});
 
-    heatmapLayer.setData(testData);
+        var geojson = L.timeDimension.layer.geoJson(timeSeriesLayer);
 
+        geojson.addTo(map);
+
+
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        alert(textStatus + jqXHR);
+    });
+    //
+    // var mapData = [
+    //     {'lat':37.565717, 'lng':126.976971, 'val':13, 'radius':10},
+    //     {'lat':37.548316, 'lng':127.06037, 'val':6, 'radius':10},
+    //     {'lat':37.59384, 'lng':127.075298, 'val':33, 'radius':10},
+    //     {'lat':37.656185, 'lng':127.039009, 'val':22, 'radius':10},
+    //     {'lat':37.609491, 'lng':126.930682, 'val':17, 'radius':10},
+    //     {'lat':37.569195, 'lng':126.915256, 'val':42, 'radius':30},
+    //     {'lat':37.555278, 'lng':126.93805, 'val':2, 'radius':10},
+    //     {'lat':37.522056, 'lng':126.890612, 'val':3, 'radius':10},
+    //     {'lat':37.483125, 'lng':126.901416, 'val':49.9, 'radius':10},
+    //     {'lat':37.505908, 'lng':127.003438, 'val':0.2, 'radius':20},
+    //     {'lat':37.516365, 'lng':127.020339, 'val':6, 'radius':10},
+    //     {'lat':37.516614, 'lng':127.131325, 'val':13, 'radius':10},
+    //     {'lat':37.67790008, 'lng':127.00328, 'val':21, 'radius':20}
+    // ];
+    //
+    // var testData = {
+    //     max: 50,
+    //     data: mapData
+    // };
+    //
+    // var cfg = {
+    //     "radius": 'radius',
+    //     "maxOpacity": .5,
+    //     "scaleRadius": true,
+    //     "scaleRadius": false,
+    //     "useLocalExtrema": true,
+    //     latField: 'lat',
+    //     lngField: 'lng',
+    //     valueField: 'val'
+    // };
+    //
+    // var heatmapLayer = new HeatmapOverlay(cfg).addTo(map);
+    //
+    // heatmapLayer.setData(testData);
+    //
 
     var theLegend = L.control({
         position: 'topright'
@@ -149,190 +183,16 @@ $(document).ready(function(){
     }
 });
 
-/* 시간으로 지도 검색 */
-function searchMap(datetime) {
-
-    datetime = datetime.substr(0,19);
-
-    $("#timeVal").val(datetime);
-    rainResultList = "";
-
-    $.ajax({
-        url: "/monitoring/findRainResultList",
-        type: "GET",
-        data: $("#searchForm").serialize()
-    }).done(function (data, textStatus, jqXHR) {
-        rainResultList = data.rainResultList;
-
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-        alert(textStatus + jqXHR);
-    });
-
-    // TODO:지도마커 검색+지도에 표시
-}
-
 /* 화면 초기화 */
 function refresh() {
     window.location.reload();
-}
-
-/* 차트 작성 */
-function setChart(title, dataArr) {
-
-    var theme = {
-        color: [
-            '#26B99A', '#34495E', '#3498DB', '#BDC3C7',
-            '#9B59B6', '#8abb6f', '#759c6a', '#bfd3b7'
-        ],
-
-        title: {
-            x: 'center',
-            y: 'top',
-            itemGap: 20,
-            textStyle: {
-                fontWeight: 'bolder',
-                fontsize: 20
-            }
-        },
-
-        dataRange: {
-            color: ['#1f610a', '#97b58d', '#bfd3b7', '#ffffff']
-        },
-
-        toolbox: {
-            color: ['#408829', '#408829', '#408829', '#408829']
-        },
-
-        tooltip: {
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            axisPointer: {
-                type: 'line',
-                lineStyle: {
-                    color: '#408829',
-                    type: 'dashed'
-                },
-                crossStyle: {
-                    color: '#408829'
-                },
-                shadowStyle: {
-                    color: 'rgba(200,200,200,0.3)'
-                }
-            }
-        },
-
-        grid: {
-            borderWidth: 0
-        },
-
-        categoryAxis: {
-            axisLine: {
-                lineStyle: {
-                    color: 'rgba(0,0,0,0.5)'
-                }
-            },
-            splitLine: {
-                lineStyle: {
-                    color: ['#eee']
-                }
-            }
-        },
-
-        valueAxis: {
-            axisLine: {
-                lineStyle: {
-                    color: 'rgba(0,0,0,0.5)'
-                }
-            },
-            splitArea: {
-                show: true,
-                areaStyle: {
-                    color: ['rgba(250,250,250,0.1)', 'rgba(200,200,200,0.1)']
-                }
-            },
-            splitLine: {
-                lineStyle: {
-                    color: ['#eee']
-                }
-            }
-        },
-        textStyle: {
-            fontFamily: 'Arial, Verdana, sans-serif'
-        }
-    };
-
-    var echartLine = echarts.init($('#chartArea')[0], theme);
-
-    window.onresize = function() {
-        echartLine.resize();
-    };
-
-    echartLine.setOption({
-        title: {
-            text: title
-        },
-        tooltip: {
-            trigger: 'axis',
-            textStyle: {
-                color: '#FFF'
-            }
-        },
-        legend: {
-            x: 220,
-            y: 40,
-            data: ['강수예측']
-        },
-        toolbox: {
-            show: true,
-            feature: {
-                magicType: {
-                    show: true,
-                    title: {
-                        line: 'Line',
-                        bar: 'Bar',
-                    },
-                    type: ['line', 'bar']
-                },
-                restore: {
-                    show: true,
-                    title: "Restore"
-                },
-                saveAsImage: {
-                    show: true,
-                    title: "Save Image"
-                }
-            }
-        },
-        calculable: true,
-        xAxis: [{
-            type: 'category',
-            name: '예측날짜',
-            boundaryGap: false,
-            nameLocation: 'middle',
-            nameGap: 25,
-        }],
-        yAxis: [{
-            type: 'value',
-            name: '강수확률(%)',
-            nameLocation: 'middle',
-            nameGap: 50,
-            axisLabel: {
-                formatter: '{value}'
-            }
-        }],
-        series: [{
-            name: '강수예측',
-            type: 'line',
-            smooth: true,
-            data: dataArr
-        }]
-    });
 }
 
 /* 강수량 별 색 지정 */
 function getColor(rainResult) {
     switch (rainResult) {
         case 1:
-            return 'rgba(0,0,0,0)';
+            return 'rgba(255,255,255,255)';
         case 2:
             return 'rgba(0,200,255,255)';
         case 3:
