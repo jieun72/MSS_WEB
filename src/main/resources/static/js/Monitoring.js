@@ -75,8 +75,7 @@ $(document).ready(function(){
             return {
                 opacity: 1,
                 radius: feature.properties.radius,
-                color: 'black',
-                border: 1,
+                color: 'rgba(0,0,0,0)',
                 fillOpacity: 1,
                 fillColor: getColor(feature.properties.rainresult)
             };
