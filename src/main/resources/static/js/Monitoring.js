@@ -176,7 +176,8 @@ $(document).ready(function(){
     });
 
     if(isTouchDevice) {
-        // TODO: (모바일전용) 위치정보 받아오기
+        // (모바일전용) 위치정보 버튼
+        L.control.locate().addTo(map);
 
         // TODO: (모바일전용) 실시간 알림 제공
     }
