@@ -178,7 +178,7 @@
 
 .mapAreaMobile {
     width: 100%;
-    height: 700px;
+    height: 800px;
     background-color: #c69500;
 }
 
@@ -201,13 +201,6 @@
 .chartArea {
     width: 100%;
     height: 300px;
-    margin-bottom: 10px;
-}
-
-.tableArea {
-    width: 100%;
-    height: 300px;
-    background-color: #fff3cd;
     margin-bottom: 10px;
 }
 

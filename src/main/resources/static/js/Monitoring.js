@@ -242,6 +242,6 @@ function getColor(rainResult) {
         case 25:
             return 'rgba(51,51,51,255)';
         default:
-            return 'white';
+            return 'rgba(0,0,0,0)';
     }
 }
