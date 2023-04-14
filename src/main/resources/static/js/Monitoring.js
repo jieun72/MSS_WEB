@@ -144,11 +144,9 @@ $(document).ready(function(){
         // (모바일전용) 위치정보 버튼
         L.control.locate().addTo(map);
 
-        // TODO: (모바일전용) 실시간 알림 제공
+        // (모바일전용) 실시간 알림 제공
         function onLocationFound(e) {
             var latlng = e.latlng;
-            console.log(latlng.lat);
-            console.log(latlng.lng);
             $.ajax({
                 url: "/monitoring/searchWarning",
                 type: "GET",
