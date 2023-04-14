@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.SimpleDateFormat;
@@ -73,6 +74,32 @@ public class MonitoringController {
 
         String jsonArray = this.makeJson(rainResult);
         searchForm.setJsonResult(jsonArray);
+
+        model.addAttribute(searchForm);
+        return searchForm;
+    }
+
+    /*
+     * GET 리퀘스트 (강수 예보 알람 표시)
+     * @param String lat
+     * @param String lon
+     * @param Model model
+     * @return MonitoringForm searchForm
+     * @throws Exception 예외
+     * */
+    @RequestMapping(method = RequestMethod.GET, value = "/searchWarning")
+    public @ResponseBody
+    MonitoringForm searchWarning(
+            @RequestParam("lat") float lat, @RequestParam("lon") float lon,
+            @RequestParam("datetime") String datetime,
+            final Model model) throws Exception {
+
+        // TODO:테스트용 데이터(추후삭제)
+        datetime = "2022-12-01 03:10:00";
+        Integer warningResult = this.monitoringService.searchAlert(lat, lon, datetime);
+
+        MonitoringForm searchForm = new MonitoringForm();
+        searchForm.setWarningResult(warningResult);
 
         model.addAttribute(searchForm);
         return searchForm;

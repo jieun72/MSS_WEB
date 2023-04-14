@@ -21,4 +21,7 @@ public class MonitoringForm {
     /* 검색결과-JSON */
     private String jsonResult;
 
+    /* 검색결과-강수예보 알람 */
+    private int warningResult;
+
 }

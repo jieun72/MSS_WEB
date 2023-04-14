@@ -50,12 +50,42 @@ public interface MonitoringRepository extends JpaRepository<RainBase, RainBaseKe
                     "else a.base_time " +
                     "end as fcstTime, "+
             "   b.rain_result as rainResult " +
-            "from mss.\"TB_RAIN_BASE\" a " +
-            "inner join mss.\"TB_RAIN_FCST\" b " +
+            "from \"TB_RAIN_BASE\" a " +
+            "inner join \"TB_RAIN_FCST\" b " +
             "on a.base_time = b.base_time " +
             "and a.stn_id = b.stn_id " +
             "where a.base_time = to_timestamp(:datetime, 'YYYY-MM-DD HH24:MI') ",
             nativeQuery = true
     )
     List<ResponseRainVO> findRainResult(@Param("datetime") final String datetime);
+
+
+    @Query(value =
+            "select max(alert) from (select" +
+            "   case when bs.rain_result >= 21 then " +
+                    "case when bs.rain_result >= 23 then 2 " +
+                    "else 1 " +
+                    "end " +
+            "   else 0 " +
+            "   end as alert " +
+            "from " +
+            "   (( " +
+            "   select " +
+            "       stn_id , " +
+            "       st_distance( " +
+            "           st_makepoint(trb.lon, trb.lat), " +
+            "           st_makepoint(:lon, :lat)) as dist " +
+            "   from " +
+            "       \"TB_RAIN_BASE\" trb " +
+            "   where " +
+            "       trb.base_time = to_timestamp(:datetime, 'YYYY-MM-DD HH24:MI') " +
+            "   order by " +
+            "       dist asc " +
+            "   limit 1 " +
+            ") as b " +
+            "inner join \"TB_RAIN_FCST\" trf on " +
+            "   b.stn_id = trf.stn_id ) as bs) as ms ",
+            nativeQuery = true
+    )
+    Integer findAlert(@Param("lat") final float lat, @Param("lon") final float lon, @Param("datetime") final String datetime);
 }

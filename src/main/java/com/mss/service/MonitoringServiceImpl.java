@@ -27,4 +27,12 @@ public class MonitoringServiceImpl implements MonitoringService{
         List<ResponseRainVO> resultList = this.monitoringRepository.findRainResult(datetime);
         return resultList;
     }
+
+    @Override
+    public Integer searchAlert(float lat, float lon, String datetime) throws Exception {
+        Integer returnVal = this.monitoringRepository.findAlert(lat, lon, datetime);
+        return returnVal;
+    }
+
+
 }

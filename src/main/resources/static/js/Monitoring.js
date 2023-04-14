@@ -3,6 +3,8 @@ $(document).ready(function(){
     var isTouchDevice = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|playbook|silk|BlackBerry|BB10|Windows Phone|Tizen|Bada|webOS|IEMobile|Opera Mini)/);
     var datetime = $("#timeVal").val();
 
+    $("#alertArea").hide();
+
     // 웹-모바일 화면구성
     if(!isTouchDevice) {
         // PC
@@ -93,43 +95,6 @@ $(document).ready(function(){
     }).fail(function (jqXHR, textStatus, errorThrown) {
         alert(textStatus + jqXHR);
     });
-    //
-    // var mapData = [
-    //     {'lat':37.565717, 'lng':126.976971, 'val':13, 'radius':10},
-    //     {'lat':37.548316, 'lng':127.06037, 'val':6, 'radius':10},
-    //     {'lat':37.59384, 'lng':127.075298, 'val':33, 'radius':10},
-    //     {'lat':37.656185, 'lng':127.039009, 'val':22, 'radius':10},
-    //     {'lat':37.609491, 'lng':126.930682, 'val':17, 'radius':10},
-    //     {'lat':37.569195, 'lng':126.915256, 'val':42, 'radius':30},
-    //     {'lat':37.555278, 'lng':126.93805, 'val':2, 'radius':10},
-    //     {'lat':37.522056, 'lng':126.890612, 'val':3, 'radius':10},
-    //     {'lat':37.483125, 'lng':126.901416, 'val':49.9, 'radius':10},
-    //     {'lat':37.505908, 'lng':127.003438, 'val':0.2, 'radius':20},
-    //     {'lat':37.516365, 'lng':127.020339, 'val':6, 'radius':10},
-    //     {'lat':37.516614, 'lng':127.131325, 'val':13, 'radius':10},
-    //     {'lat':37.67790008, 'lng':127.00328, 'val':21, 'radius':20}
-    // ];
-    //
-    // var testData = {
-    //     max: 50,
-    //     data: mapData
-    // };
-    //
-    // var cfg = {
-    //     "radius": 'radius',
-    //     "maxOpacity": .5,
-    //     "scaleRadius": true,
-    //     "scaleRadius": false,
-    //     "useLocalExtrema": true,
-    //     latField: 'lat',
-    //     lngField: 'lng',
-    //     valueField: 'val'
-    // };
-    //
-    // var heatmapLayer = new HeatmapOverlay(cfg).addTo(map);
-    //
-    // heatmapLayer.setData(testData);
-    //
 
     var theLegend = L.control({
         position: 'topright'
@@ -180,7 +145,41 @@ $(document).ready(function(){
         L.control.locate().addTo(map);
 
         // TODO: (모바일전용) 실시간 알림 제공
+        function onLocationFound(e) {
+            var latlng = e.latlng;
+            console.log(latlng.lat);
+            console.log(latlng.lng);
+            $.ajax({
+                url: "/monitoring/searchWarning",
+                type: "GET",
+                data: { "lat" : latlng.lat, "lon" : latlng.lng, "datetime" : datetime }
+            }).done(function (data, textStatus, jqXHR) {
+
+                $("#alertArea").hide();
+                var warningResult = data.warningResult;
+                if(warningResult == 1) {
+                    $("#alertArea").show();
+                    $("#alertArea").removeClass("alert-danger");
+                    $("#alertArea").addClass("alert-warning");
+
+                    var contentHtml = '<strong>호우 주의보 발생 중!</strong> 많은 비가 예상되니 외출자제 등 안전에 주의바랍니다.</span>'
+                    $("#alertContent").html(contentHtml);
+                } else if(warningResult == 2) {
+                    $("#alertArea").show();
+                    $("#alertArea").removeClass("alert-warning");
+                    $("#alertArea").addClass("alert-danger");
+
+                    var contentHtml = '<strong>호우 경보 발생 중!</strong> 산사태·상습침수 등 위험지역 대피, 외출자제 등 안전에 주의바랍니다.</span>'
+                    $("#alertContent").html(contentHtml);
+                }
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + jqXHR);
+            });
+        }
     }
+
+    map.on('locationfound', onLocationFound);
 });
 
 /* 화면 초기화 */

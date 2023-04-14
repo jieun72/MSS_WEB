@@ -21,4 +21,12 @@ public interface MonitoringService {
      * @return List<ResponseRainVO>
      * */    
     List<ResponseRainVO> searchRainResult(String datetime) throws Exception;
+
+    /*
+    * 모니터링 화면 실시간 알람 검색
+    * @param float lat
+    * @param float lon
+    * @param String datetime
+    * @return Integer */
+    Integer searchAlert(float lat, float lon, String datetime) throws Exception;
 }
