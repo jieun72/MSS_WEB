@@ -9,15 +9,11 @@ $(document).ready(function(){
     if(!isTouchDevice) {
         // PC
         $("#mapArea").addClass("mapArea");
-        $("#infoArea").addClass("infoArea");
         $("#mapArea").removeClass("mapAreaMobile");
-        $("#infoArea").removeClass("infoAreaMobile");
     } else {
         // mobile
         $("#mapArea").removeClass("mapArea");
-        $("#infoArea").removeClass("infoArea");
         $("#mapArea").addClass("mapAreaMobile");
-        $("#infoArea").addClass("infoAreaMobile");
     }
 
     var currentTime = new Date(datetime);
