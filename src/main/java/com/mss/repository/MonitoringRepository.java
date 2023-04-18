@@ -25,35 +25,34 @@ public interface MonitoringRepository extends JpaRepository<RainBase, RainBaseKe
             "select " +
             "   a.base_time as baseTime, " +
             "   a.stn_id as stnId, " +
-            "   a.lat as lat, " +
-            "   a.lon as lon, " +
-            "   a.expand_area as expandArea, " +
-            "   case when b.seq = 1 then a.base_time " +
-                    "when b.seq = 2 then a.base_time + interval '10 min' " +
-                    "when b.seq = 3 then a.base_time + interval '20 min' " +
-                    "when b.seq = 4 then a.base_time + interval '30 min' " +
-                    "when b.seq = 5 then a.base_time + interval '40 min' " +
-                    "when b.seq = 6 then a.base_time + interval '50 min' " +
-                    "when b.seq = 7 then a.base_time + interval '60 min' " +
-                    "when b.seq = 8 then a.base_time + interval '70 min' " +
-                    "when b.seq = 9 then a.base_time + interval '80 min' " +
-                    "when b.seq = 10 then a.base_time + interval '90 min' " +
-                    "when b.seq = 11 then a.base_time + interval '100 min' " +
-                    "when b.seq = 12 then a.base_time + interval '110 min' " +
-                    "when b.seq = 13 then a.base_time + interval '120 min' " +
-                    "when b.seq = 14 then a.base_time + interval '130 min' " +
-                    "when b.seq = 15 then a.base_time + interval '140 min' " +
-                    "when b.seq = 16 then a.base_time + interval '150 min' " +
-                    "when b.seq = 17 then a.base_time + interval '160 min' " +
-                    "when b.seq = 18 then a.base_time + interval '170 min' " +
-                    "when b.seq = 19 then a.base_time + interval '180 min' " +
+            "   b.lat as lat, " +
+            "   b.lon as lon, " +
+            "   b.expand_area as expandArea, " +
+            "   case when a.seq = 1 then a.base_time " +
+                    "when a.seq = 2 then a.base_time + interval '10 min' " +
+                    "when a.seq = 3 then a.base_time + interval '20 min' " +
+                    "when a.seq = 4 then a.base_time + interval '30 min' " +
+                    "when a.seq = 5 then a.base_time + interval '40 min' " +
+                    "when a.seq = 6 then a.base_time + interval '50 min' " +
+                    "when a.seq = 7 then a.base_time + interval '60 min' " +
+                    "when a.seq = 8 then a.base_time + interval '70 min' " +
+                    "when a.seq = 9 then a.base_time + interval '80 min' " +
+                    "when a.seq = 10 then a.base_time + interval '90 min' " +
+                    "when a.seq = 11 then a.base_time + interval '100 min' " +
+                    "when a.seq = 12 then a.base_time + interval '110 min' " +
+                    "when a.seq = 13 then a.base_time + interval '120 min' " +
+                    "when a.seq = 14 then a.base_time + interval '130 min' " +
+                    "when a.seq = 15 then a.base_time + interval '140 min' " +
+                    "when a.seq = 16 then a.base_time + interval '150 min' " +
+                    "when a.seq = 17 then a.base_time + interval '160 min' " +
+                    "when a.seq = 18 then a.base_time + interval '170 min' " +
+                    "when a.seq = 19 then a.base_time + interval '180 min' " +
                     "else a.base_time " +
                     "end as fcstTime, "+
-            "   b.rain_result as rainResult " +
-            "from \"TB_RAIN_BASE\" a " +
-            "inner join \"TB_RAIN_FCST\" b " +
-            "on a.base_time = b.base_time " +
-            "and a.stn_id = b.stn_id " +
+            "   a.rain_result as rainResult " +
+            "from \"TB_RAIN_FCST\" a " +
+            "inner join \"TB_STN_INFO\" b " +
+            "on a.stn_id = b.stn_id " +
             "where a.base_time = to_timestamp(:datetime, 'YYYY-MM-DD HH24:MI') ",
             nativeQuery = true
     )
