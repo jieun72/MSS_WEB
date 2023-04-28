@@ -68,22 +68,23 @@ public interface MonitoringRepository extends JpaRepository<RainBase, RainBaseKe
             "   else 0 " +
             "   end as alert " +
             "from " +
-            "   (( " +
+            "   ( " +
             "   select " +
-            "       stn_id , " +
+            "       trf.stn_id , " +
+            "       trf.rain_result, " +
             "       st_distance( " +
-            "           st_makepoint(trb.lon, trb.lat), " +
+            "           st_makepoint(tsi.lon, tsi.lat), " +
             "           st_makepoint(:lon, :lat)) as dist " +
             "   from " +
-            "       \"TB_RAIN_BASE\" trb " +
+            "       \"TB_RAIN_FCST\" trf " +
+            "   inner join \"TB_STN_INFO\" tsi on " +
+            "       trf.stn_id = tsi.stn_id " +
             "   where " +
-            "       trb.base_time = to_timestamp(:datetime, 'YYYY-MM-DD HH24:MI') " +
+            "       trf.base_time = to_timestamp(:datetime, 'YYYY-MM-DD HH24:MI') " +
             "   order by " +
             "       dist asc " +
             "   limit 1 " +
-            ") as b " +
-            "inner join \"TB_RAIN_FCST\" trf on " +
-            "   b.stn_id = trf.stn_id ) as bs) as ms ",
+            ") as bs) as ms ",
             nativeQuery = true
     )
     Integer findAlert(@Param("lat") final float lat, @Param("lon") final float lon, @Param("datetime") final String datetime);
