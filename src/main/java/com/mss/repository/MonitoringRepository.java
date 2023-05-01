@@ -82,7 +82,7 @@ public interface MonitoringRepository extends JpaRepository<RainBase, RainBaseKe
             "   where " +
             "       trf.base_time = to_timestamp(:datetime, 'YYYY-MM-DD HH24:MI') " +
             "   order by " +
-            "       dist asc " +
+            "       dist asc, rain_result desc " +
             "   limit 1 " +
             ") as bs) as ms ",
             nativeQuery = true
