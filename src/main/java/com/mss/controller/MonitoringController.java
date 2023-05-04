@@ -66,9 +66,6 @@ public class MonitoringController {
         // 강수량 검색
         String searchDate = searchForm.getSearchDate();
 
-        // TODO:테스트용 데이터(추후삭제)
-        searchDate = "2022-12-01 03:10:00";
-
         List<ResponseRainVO> rainResult = this.monitoringService.searchRainResult(searchDate);
         searchForm.setRainResultList(rainResult);
 
@@ -94,8 +91,6 @@ public class MonitoringController {
             @RequestParam("datetime") String datetime,
             final Model model) throws Exception {
 
-        // TODO:테스트용 데이터(추후삭제)
-        datetime = "2022-12-01 03:10:00";
         Integer warningResult = this.monitoringService.searchAlert(lat, lon, datetime);
 
         MonitoringForm searchForm = new MonitoringForm();

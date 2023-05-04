@@ -20,7 +20,6 @@ $(document).ready(function(){
     var endDate = new Date(currentTime.getTime());
     L.TimeDimension.Util.addTimeDuration(endDate, "PT3H", true);
 
-    // TODO:테스트용 데이터(추후삭제)
     // leaflet을 이용한 지도 생성
     var map = L.map('mapArea', {
         zoom: 12,
@@ -29,11 +28,9 @@ $(document).ready(function(){
         timeDimension: true,
         timeDimensionControl: true,
         timeDimensionOptions: {
-            timeInterval: "2022-12-01 03:10:00 / 2022-12-01 06:10:00",
-            // timeInterval: currentTime.toISOString() +"/" + endDate.toISOString(),
+            timeInterval: currentTime.toISOString() +"/" + endDate.toISOString(),
             period: "PT10M",
-            currentTime: "2022-12-01 03:10:00"
-            // currentTime: currentTime.getTime()
+            currentTime: currentTime.getTime()
         },
         timeDimensionControlOptions: {
             playerOptions: {
